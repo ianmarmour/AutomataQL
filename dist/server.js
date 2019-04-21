@@ -14,12 +14,10 @@ var _require = require("apollo-server"),
     ApolloServer = _require.ApolloServer,
     gql = _require.gql;
 
+// DynamoDB Setup and Configuration
 var AWS = require("aws-sdk");
 AWS.config.update({ region: "us-west-2" });
-
 var ddb = new AWS.DynamoDB({ apiVersion: "2012-08-10" });
-// Resolvers define the technique for fetching the types in the
-// schema.  We'll retrieve books from the "books" array above.
 
 var server = new ApolloServer({
   typeDefs: _schema2.default,
@@ -27,6 +25,7 @@ var server = new ApolloServer({
   context: function context(_ref) {
     var req = _ref.req;
     return {
+      // We pass the database connector into our resolvers via the context
       database: ddb
     };
   }
