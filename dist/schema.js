@@ -1,15 +1,19 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _require = require('graphql'),
-    buildSchema = _require.buildSchema;
+var _templateObject = _taggedTemplateLiteral(["\n  input authorInput {\n    email: String\n    name: String\n  }\n\n  input postInput {\n    title: String\n    author: String\n    content: String\n  }\n\n  type Post {\n    title: String\n    author: String\n    content: String\n    id: ID!\n  }\n\n  type Author {\n    email: String\n    name: String\n    id: ID!\n  }\n\n  # The \"Query\" type is the root of all GraphQL queries.\n  # (A \"Mutation\" type will be covered later on.)\n  type Query {\n    authors: [Author]\n    posts: [Post]\n    getPost(id: ID): Post\n    getAuthor(id: ID): Author\n  }\n\n  type Mutation {\n    createAuthor(input: authorInput): Author!\n    createPost(input: postInput): Post!\n  }\n"], ["\n  input authorInput {\n    email: String\n    name: String\n  }\n\n  input postInput {\n    title: String\n    author: String\n    content: String\n  }\n\n  type Post {\n    title: String\n    author: String\n    content: String\n    id: ID!\n  }\n\n  type Author {\n    email: String\n    name: String\n    id: ID!\n  }\n\n  # The \"Query\" type is the root of all GraphQL queries.\n  # (A \"Mutation\" type will be covered later on.)\n  type Query {\n    authors: [Author]\n    posts: [Post]\n    getPost(id: ID): Post\n    getAuthor(id: ID): Author\n  }\n\n  type Mutation {\n    createAuthor(input: authorInput): Author!\n    createPost(input: postInput): Post!\n  }\n"]);
+
+function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var _require = require("apollo-server"),
+    gql = _require.gql;
 
 // Construct a schema, using GraphQL schema language
 
 
-var schema = buildSchema('\n\n  input AuthorInput {\n    name: String\n  }\n\n  input PostInput {\n    title: String\n    content: String\n    authorId: ID!\n  }\n\n  type Post {\n    id: ID!\n    title: String\n    content: String\n    authorId: ID!\n  }\n\n  type Author {\n    id: ID!\n    name: String\n  }\n\n  type Query {\n    posts: [Post]\n    authors: [Author]\n    getPost(id: ID!): Post\n    getAuthor(id: ID!): Author\n  }\n\n  type Subscription {\n    postCreated: Post\n  }\n\n  type Mutation {\n    createAuthor(input: AuthorInput): Author\n    createPost(input: PostInput): Post\n    updatePost(id: ID!, input: PostInput): Post\n  }\n');
+var typeDefs = gql(_templateObject);
 
-exports.default = schema;
+exports.default = typeDefs;

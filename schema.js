@@ -1,46 +1,44 @@
-var { buildSchema } = require('graphql');
+const { gql } = require("apollo-server");
 
 // Construct a schema, using GraphQL schema language
-var schema = buildSchema(`
-
-  input AuthorInput {
+const typeDefs = gql`
+  input authorInput {
+    email: String
     name: String
   }
 
-  input PostInput {
+  input postInput {
     title: String
+    author: String
     content: String
-    authorId: ID!
   }
 
   type Post {
-    id: ID!
     title: String
+    author: String
     content: String
-    authorId: ID!
+    id: ID!
   }
 
   type Author {
-    id: ID!
+    email: String
     name: String
+    id: ID!
   }
 
+  # The "Query" type is the root of all GraphQL queries.
+  # (A "Mutation" type will be covered later on.)
   type Query {
-    posts: [Post]
     authors: [Author]
-    getPost(id: ID!): Post
-    getAuthor(id: ID!): Author
-  }
-
-  type Subscription {
-    postCreated: Post
+    posts: [Post]
+    getPost(id: ID): Post
+    getAuthor(id: ID): Author
   }
 
   type Mutation {
-    createAuthor(input: AuthorInput): Author
-    createPost(input: PostInput): Post
-    updatePost(id: ID!, input: PostInput): Post
+    createAuthor(input: authorInput): Author!
+    createPost(input: postInput): Post!
   }
-`);
+`;
 
-export default schema;
+export default typeDefs;

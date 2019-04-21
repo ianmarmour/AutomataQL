@@ -19,13 +19,9 @@
   },
   "homepage": "https://github.com/ianmarmour/AutomataQL#readme",
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.16.4",
-    "express-graphql": "^0.7.1",
-    "express-session": "^1.16.1",
+    "apollo-server": "^2.4.8",
+    "eslint": "^5.16.0",
     "graphql": "^14.2.1",
-    "graphql-subscriptions": "^1.1.0",
-    "graphql-tools": "^4.0.4",
     "lodash": "^4.17.11",
     "typescript": "^3.4.3"
   },
