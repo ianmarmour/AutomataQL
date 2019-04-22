@@ -2,6 +2,8 @@ const { gql } = require("apollo-server");
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`
+  scalar DATE
+
   input authorInput {
     email: String
     name: String
@@ -14,6 +16,7 @@ const typeDefs = gql`
   }
 
   type Post {
+    date: DATE
     title: String
     author: String
     content: String

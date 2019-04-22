@@ -1,4 +1,8 @@
+import { GraphQLDate, GraphQLTime, GraphQLDateTime } from "graphql-iso-date";
+var moment = require("moment");
+
 const resolvers = {
+  DATE: GraphQLDate,
   Query: {
     authors: async (_, args, context) => {
       var params = {
@@ -25,6 +29,7 @@ const resolvers = {
       console.log(response.Items);
       var des_response = response.Items.map(item => ({
         id: item.id.S,
+        date: item.date.S,
         title: item.title.S,
         author: item.author.S,
         content: item.content.S
@@ -45,6 +50,7 @@ const resolvers = {
       console.log(response.Item);
       return {
         id: response.Item.id.S,
+        date: response.Item.date.S,
         title: response.Item.title.S,
         author: response.Item.author.S,
         content: response.Item.content.S
@@ -73,10 +79,13 @@ const resolvers = {
         .randomBytes(10)
         .toString("hex");
 
+      var creationDate = moment().format("YYYY-MM-DD");
+
       var params = {
         TableName: "posts",
         Item: {
           id: { S: id },
+          date: { S: creationDate },
           title: { S: args.input.title },
           author: { S: args.input.author },
           content: { S: args.input.content }
@@ -87,6 +96,7 @@ const resolvers = {
       console.log(response);
       return {
         id: id,
+        date: creationDate,
         title: args.input.title,
         author: args.input.author,
         content: args.input.content
