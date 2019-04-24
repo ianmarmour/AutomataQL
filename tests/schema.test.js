@@ -7,7 +7,8 @@ import {
 import { graphql } from "graphql";
 import { test } from "mocha";
 import { expect } from "chai"; // Using Expect style
-import typeDefs from "../schema";
+import schema from "../src/schema";
+import { printSchema } from "graphql/utilities";
 
 const authorsTestCase = {
   id: "Authors Test Case",
@@ -119,6 +120,10 @@ describe("Schema", () => {
     getPostTestCase,
     getAuthorTestCase
   ];
+
+  // We use printSchema to pull our typeDefs back out.
+  const typeDefs = printSchema(schema);
+  //REMOVE ME
 
   const mockSchema = makeExecutableSchema({ typeDefs });
 

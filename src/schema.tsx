@@ -1,4 +1,12 @@
+import { merge } from "lodash";
+import createPost from "./mutations/post/createPost";
+import createAuthor from "./mutations/author/createAuthor";
+import posts from "./queries/post/posts";
+import getPost from "./queries/post/getPost";
+import authors from "./queries/author/authors";
+import getAuthor from "./queries/author/getAuthor";
 const { gql } = require("apollo-server");
+const { makeExecutableSchema } = require("apollo-server");
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`
@@ -44,4 +52,18 @@ const typeDefs = gql`
   }
 `;
 
-export default typeDefs;
+const resolvers = merge(
+  posts,
+  getPost,
+  authors,
+  getAuthor,
+  createPost,
+  createAuthor
+);
+
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers
+});
+
+export default schema;
