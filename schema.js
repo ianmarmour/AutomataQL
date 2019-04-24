@@ -24,8 +24,8 @@ const typeDefs = gql`
   }
 
   type Author {
-    email: String
-    name: String
+    email: String!
+    name: String!
     id: ID!
   }
 
