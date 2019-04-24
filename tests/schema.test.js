@@ -6,15 +6,8 @@ import {
 
 import { graphql } from "graphql";
 import { test } from "mocha";
-import { assert } from "chai"; // Using Assert style
 import { expect } from "chai"; // Using Expect style
-import { equal } from "chai";
-import chai from "chai";
-import chaiAsPromised from "chai-as-promised";
 import typeDefs from "../schema";
-
-chai.use(chaiAsPromised);
-chai.should();
 
 const authorsTestCase = {
   id: "Authors Test Case",
@@ -162,8 +155,11 @@ describe("Schema", () => {
   cases.forEach(obj => {
     const { id, query, variables, context, expected } = obj;
     test(`query: ${id}`, async () => {
-      const result = await graphql(mockSchema, query, null, context, variables);
-      return result.should.eql(expected);
+      return await graphql(mockSchema, query, null, context, variables).then(
+        data => {
+          expect(data).to.eql(expected);
+        }
+      );
     });
   });
 });
