@@ -23,7 +23,10 @@
   "homepage": "https://github.com/ianmarmour/AutomataQL#readme",
   "dependencies": {
     "apollo-server": "^2.4.8",
+    "apollo-server-express": "^2.4.8",
     "aws-sdk": "^2.441.0",
+    "cognito-express": "^2.0.14",
+    "express": "^4.16.4",
     "graphql": "^14.2.1",
     "graphql-iso-date": "^3.6.1",
     "graphql-tools": "^4.0.4",
