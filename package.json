@@ -4,11 +4,10 @@
   "description": "Automata Blog GraphQL Backend",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -r ./babel-register.js tests",
-    "build": "rimraf dist && npm run build:types && npm run build:js",
+    "test": "mocha --require ts-node/register tests/**/*.ts",
+    "build": "rimraf dist && npm run build:types",
     "lint": "eslint",
-    "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "babel src --out-dir dist --extensions \".ts,.tsx,.js\" --source-maps inline --ignore ./node_modules,./babelrc,./package.json,./npm-debug.log,./tsconfig.json --copy-files",
+    "build:types": "tsc --p ./tsconfig.json",
     "clean": "rimraf node_modules",
     "start": "npm run build && node dist/server.js"
   },
@@ -23,31 +22,26 @@
   },
   "homepage": "https://github.com/ianmarmour/AutomataQL#readme",
   "dependencies": {
-    "@babel/runtime": "^7.4.3",
     "apollo-server": "^2.4.8",
     "aws-sdk": "^2.441.0",
     "graphql": "^14.2.1",
     "graphql-iso-date": "^3.6.1",
     "graphql-tools": "^4.0.4",
-    "lodash": "^4.17.11",
     "moment": "^2.24.0",
-    "typescript": "^3.4.3"
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@babel/cli": "^7.4.3",
-    "@babel/core": "^7.4.3",
-    "@babel/plugin-proposal-class-properties": "^7.4.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.4.3",
-    "@babel/plugin-transform-runtime": "^7.4.3",
-    "@babel/polyfill": "^7.4.3",
-    "@babel/preset-env": "^7.4.3",
-    "@babel/preset-typescript": "^7.3.3",
-    "@babel/register": "^7.4.0",
-    "babel-eslint": "^10.0.1",
+    "@types/aws-sdk": "^2.7.0",
+    "@types/chai": "^4.1.7",
+    "@types/graphql": "^14.2.0",
+    "@types/mocha": "^5.2.6",
     "chai": "^4.2.0",
     "eslint": "^5.16.0",
     "mocha": "^6.1.4",
     "rimraf": "^2.6.3",
-    "sinon": "^7.3.2"
+    "sinon": "^7.3.2",
+    "ts-node": "^8.1.0",
+    "typescript": "^3.4.3",
+    "type-graphql": "^0.17.3"
   }
 }
