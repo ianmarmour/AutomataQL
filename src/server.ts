@@ -5,6 +5,8 @@ import { ApolloServer } from "apollo-server-express";
 import authorResolver from "./resolvers/author/authorResolver";
 import postResolver from "./resolvers/post/postResolver";
 import { buildSchema } from "type-graphql";
+import cors from "cors";
+import cookieparser from "cookie-parser";
 import cognitoMiddleware from "cognito-express";
 
 // DynamoDB Setup and Configuration
@@ -14,15 +16,21 @@ var ddb = new AWS.DynamoDB({ apiVersion: "2012-08-10" });
 
 const cognitoApolloMiddleware = new cognitoMiddleware({
   region: "us-west-2",
-  cognitoUserPoolId: "us-west-2_Q10tI6PtO",
+  cognitoUserPoolId: "us-west-2_HQQi20xli",
   tokenUse: "access", //Possible Values: access | id
   tokenExpiration: 3600000 //Up to default expiration of 1 hour (3600000 ms)
 });
 
 //Our middleware that authenticates all APIs under our 'authenticatedRoute' Router
 const authenticateUser = function(req, res, next) {
-  //I'm passing in the access token in header under key accessToken
-  let accessTokenFromClient = req.headers.accesstoken;
+  let accessTokenFromClient;
+
+  // Parse out the accessToken
+  for (let cookie in req.cookies) {
+    if (cookie.includes("accessToken")) {
+      accessTokenFromClient = req.cookies[cookie];
+    }
+  }
 
   //Fail if token not present in header.
   if (!accessTokenFromClient)
@@ -57,10 +65,21 @@ async function bootstrap() {
 
   // Setup Express and Apply Cognito Authentication
   const app = express();
-  app.use(authenticateUser);
+  app.use(
+    cookieparser(),
+    cors({
+      origin: "http://localhost:8080",
+      credentials: true
+    }),
+    authenticateUser
+  );
 
   // Apply our express middleware to our Apollo Server
-  server.applyMiddleware({ app, path: "/graphql" });
+  server.applyMiddleware({
+    app,
+    path: "/graphql",
+    cors: false
+  });
 
   app.listen({ port: 4000 }, () =>
     console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)

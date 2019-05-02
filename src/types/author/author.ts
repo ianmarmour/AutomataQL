@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, ObjectType, ID } from "type-graphql";
 
 @ObjectType()
 class Author {
@@ -8,7 +8,7 @@ class Author {
   @Field()
   name: string;
 
-  @Field()
+  @Field(type => ID)
   id: string;
 }
 

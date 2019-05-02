@@ -1,8 +1,8 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, ObjectType, ID } from "type-graphql";
 
 @ObjectType()
 class Post {
-  @Field()
+  @Field(type => ID)
   id: string;
 
   @Field()

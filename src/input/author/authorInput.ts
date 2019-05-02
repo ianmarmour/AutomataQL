@@ -1,8 +1,8 @@
-import { Field, ArgsType } from "type-graphql";
+import { Field, ArgsType, ID } from "type-graphql";
 
 @ArgsType()
 class AuthorInput {
-  @Field()
+  @Field(type => ID)
   id: string;
 }
 

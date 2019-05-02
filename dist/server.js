@@ -18,6 +18,8 @@ const apollo_server_express_1 = require("apollo-server-express");
 const authorResolver_1 = __importDefault(require("./resolvers/author/authorResolver"));
 const postResolver_1 = __importDefault(require("./resolvers/post/postResolver"));
 const type_graphql_1 = require("type-graphql");
+const cors_1 = __importDefault(require("cors"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cognito_express_1 = __importDefault(require("cognito-express"));
 // DynamoDB Setup and Configuration
 var AWS = require("aws-sdk");
@@ -25,14 +27,19 @@ AWS.config.update({ region: "us-west-2" });
 var ddb = new AWS.DynamoDB({ apiVersion: "2012-08-10" });
 const cognitoApolloMiddleware = new cognito_express_1.default({
     region: "us-west-2",
-    cognitoUserPoolId: "us-west-2_Q10tI6PtO",
+    cognitoUserPoolId: "us-west-2_HQQi20xli",
     tokenUse: "access",
     tokenExpiration: 3600000 //Up to default expiration of 1 hour (3600000 ms)
 });
 //Our middleware that authenticates all APIs under our 'authenticatedRoute' Router
 const authenticateUser = function (req, res, next) {
-    //I'm passing in the access token in header under key accessToken
-    let accessTokenFromClient = req.headers.accesstoken;
+    let accessTokenFromClient;
+    // Parse out the accessToken
+    for (let cookie in req.cookies) {
+        if (cookie.includes("accessToken")) {
+            accessTokenFromClient = req.cookies[cookie];
+        }
+    }
     //Fail if token not present in header.
     if (!accessTokenFromClient)
         return res.status(401).send("Access Token missing from header");
@@ -60,9 +67,16 @@ function bootstrap() {
         });
         // Setup Express and Apply Cognito Authentication
         const app = express_1.default();
-        app.use(authenticateUser);
+        app.use(cookie_parser_1.default(), cors_1.default({
+            origin: "http://localhost:8080",
+            credentials: true
+        }), authenticateUser);
         // Apply our express middleware to our Apollo Server
-        server.applyMiddleware({ app, path: "/graphql" });
+        server.applyMiddleware({
+            app,
+            path: "/graphql",
+            cors: false
+        });
         app.listen({ port: 4000 }, () => console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`));
     });
 }
